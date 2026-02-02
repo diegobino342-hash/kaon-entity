@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: kaon
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: bash infra/start.sh

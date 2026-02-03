@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="neural-interface">
+        <div id="pair-display">ATIVO: <span id="symbol">---</span></div>
+        <canvas id="live-chart"></canvas>
+        
+        <div id="signal-overlay" class="hidden">
+            <div class="alert-box">
+                <h1 id="signal-dir">--</h1>
+                <p>PRÓXIMO CANDLE EM: <span id="signal-time">--:--</span></p>
+                <div class="probability-bar"><div id="fill"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="beep-alert" src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-confirmation-914.mp3"></audio>
+    <script src="app.js"></script>
+</body>
+</html>

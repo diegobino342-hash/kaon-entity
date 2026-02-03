@@ -1,6 +1,0 @@
-websockets
-pandas
-numpy
-flask
-flask-cors
-sqlalchemy

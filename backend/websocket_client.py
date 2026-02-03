@@ -1,4 +1,6 @@
-import websocket, json
+import websocket
+import json
+from config import WS_URL, ORIGIN
 
 class MarketSocket:
     def __init__(self, on_tick):
@@ -13,11 +15,15 @@ class MarketSocket:
     def connect(self, symbol):
         self.ws = websocket.WebSocketApp(
             WS_URL,
-            header={"Origin": ORIGIN},
+            header=[f"Origin: {ORIGIN}"],
             on_message=self.on_message
         )
-        self.ws.on_open = lambda ws: ws.send(json.dumps({
-            "event": "pusher:subscribe",
-            "data": {"auth": "", "channel": symbol}
-        }))
+
+        def on_open(ws):
+            ws.send(json.dumps({
+                "event": "pusher:subscribe",
+                "data": {"auth": "", "channel": symbol}
+            }))
+
+        self.ws.on_open = on_open
         self.ws.run_forever()

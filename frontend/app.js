@@ -1,15 +1,17 @@
-async function update() {
-  const r = await fetch("/signal");
-  const d = await r.json();
-  if (d.direction) {
-    document.getElementById("signal").innerText =
-      `${d.direction} ${d.probability*100}%`;
+async function updateSignal() {
+  const res = await fetch("/signal");
+  const data = await res.json();
+
+  if (data.direction) {
+    const text = `${data.symbol} | ${data.direction} | ${data.probability}%`;
+    document.getElementById("signal").innerText = text;
 
     speechSynthesis.speak(
       new SpeechSynthesisUtterance(
-        `Sinal de ${d.direction}`
+        `Sinal de ${data.direction} com probabilidade ${data.probability} por cento`
       )
     );
   }
 }
-setInterval(update, 3000);
+
+setInterval(updateSignal, 3000);

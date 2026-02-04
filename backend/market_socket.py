@@ -9,16 +9,8 @@ class MarketSocket:
         self.url = DERIV_WS
         self.ws = None
 
-    # ===============================
-    # MÉTODO QUE ESTAVA FALTANDO
-    # ===============================
-    def connect(self, _=None):
-        """
-        Método de compatibilidade.
-        NÃO muda arquitetura.
-        Apenas inicia o WebSocket corretamente.
-        """
-
+    # MÉTODO QUE O agent.py ESPERA
+    def connect(self):
         self.ws = websocket.WebSocketApp(
             self.url,
             on_open=self.on_open,
@@ -27,19 +19,18 @@ class MarketSocket:
             on_close=self.on_close
         )
 
-        # Rodar em thread para não travar o processo
+        # thread para não bloquear o processo
         threading.Thread(
             target=self.ws.run_forever,
             daemon=True
         ).start()
 
-    # ===============================
-    # CALLBACKS
-    # ===============================
+    # ================= CALLBACKS =================
+
     def on_open(self, ws):
         print("[WS] Conectado à Deriv")
 
-        # Exemplo de subscribe (mantém estrutura aberta)
+        # subscribe simples (você pode alterar depois)
         ws.send(json.dumps({
             "ticks": "frxEURUSD"
         }))
@@ -50,8 +41,9 @@ class MarketSocket:
         if "tick" in data:
             price = data["tick"]["quote"]
             epoch = data["tick"]["epoch"]
-            # Aqui entra sua lógica real (inalterada)
-            # print(f"[TICK] {price} @ {epoch}")
+
+            # aqui entra sua lógica depois
+            # print(price, epoch)
 
     def on_error(self, ws, error):
         print("[WS ERROR]", error)

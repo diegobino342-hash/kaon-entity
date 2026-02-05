@@ -2,14 +2,14 @@ import websocket
 import json
 import threading
 
-DERIV_WS = "wss://ws.binaryws.com/websockets/v3?app_id=1089"
-
 class MarketSocket:
     def __init__(self):
-        self.url = DERIV_WS
+        self.url = "wss://ws.derivws.com/websockets/v3?app_id=1089"
         self.ws = None
 
     def connect(self):
+        print("[WS] Criando conexão WebSocket...")
+
         self.ws = websocket.WebSocketApp(
             self.url,
             on_open=self.on_open,
@@ -24,23 +24,26 @@ class MarketSocket:
         ).start()
 
     def on_open(self, ws):
-        print("[WS] Conectado à Deriv")
+        print("[WS] Conectado com sucesso")
 
-        ws.send(json.dumps({
-            "ticks": "frxEURUSD"
-        }))
+        # subscribe em ticks reais (exemplo EUR/USD)
+        payload = {
+            "ticks": "frxEURUSD",
+            "subscribe": 1
+        }
+
+        ws.send(json.dumps(payload))
 
     def on_message(self, ws, message):
         data = json.loads(message)
 
         if "tick" in data:
             price = data["tick"]["quote"]
-            epoch = data["tick"]["epoch"]
-            # aqui você conecta com sua lógica depois
-            # print(price, epoch)
+            symbol = data["tick"]["symbol"]
+            print(f"[TICK] {symbol} → {price}")
 
     def on_error(self, ws, error):
         print("[WS ERROR]", error)
 
-    def on_close(self, ws, *_):
+    def on_close(self, ws, close_status_code, close_msg):
         print("[WS] Conexão encerrada")

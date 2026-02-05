@@ -1,13 +1,14 @@
-import time
 from market_socket import MarketSocket
+import time
 
-class TradingAgent:
+class Agent:
     def __init__(self):
-        self.ws = MarketSocket()
+        self.socket = MarketSocket()
 
     def start(self):
-        self.ws.connect()
+        print("[AGENT] Iniciando agente em tempo real...")
+        self.socket.connect()
 
-        # mantém o agente vivo
+        # loop vivo apenas para manter o processo ativo
         while True:
             time.sleep(1)
